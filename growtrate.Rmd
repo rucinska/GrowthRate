@@ -1,0 +1,172 @@
+---
+title: "Calculate Growth Rate"
+output: html_notebook
+---
+http://vlab.amrita.edu/?sub=3&brch=73&sim=1105&cnt=1
+
+Libraries
+```{r}
+library(XLConnect)
+library(readxl)
+library(dplyr)
+
+library(tidyr)
+library(ggplot2)
+library(data.table)
+library(outliers)
+library(gtools)
+
+```
+
+Read files form a folder
+https://stackoverflow.com/questions/32203853/how-to-read-multiple-xlsx-file-in-r-using-loop-with-specific-rows-and-columns
+```{r}
+
+file.list <- list.files(pattern='.xlsx')
+#df.list <- lapply(file.list, read_excel(range = anchored("A43", dim = c(9, 13))))
+
+#read files, extract Start time and add it as a column to dataframe "data" - each file plate is stored as "plate"
+dat = lapply(file.list, function(i){
+    data = read_excel(i, range = anchored("A43", dim = c(9, 13)))
+   
+    date <- readxl::read_excel(i, range = "E40", col_names ="date")
+   plate <- cbind(data, date$date)
+   
+})
+
+#turn them to a dataframe
+all_plates = do.call("rbind.data.frame", dat) 
+
+
+#remove water
+names(all_plates)
+```
+
+
+
+
+Read one specific file
+```{r}
+# path <- "~/Desktop/GrowthRate/dataPlateReader/28062017 OD600.xlsx"
+# 
+# data <- readxl::read_excel(path,range = anchored("A43", dim = c(9, 13))) 
+# 
+# date <- readxl::read_excel(path, range = "E40", col_names ="date")
+# data
+# #as.factor(date$date)
+# #rep(date$date, each=6)
+# plate <- cbind(data, date$date)
+# plate
+```
+
+Specify col names 
+```{r}
+col_names <- c("Layout", "Sample1","Blank1","Blankx","Blankx1", "Sample2","Blank2","Sample3", "Blank3","Blankx2","Blankx3","Blank4","Sample4", "StartTime")
+
+names(all_plates) <- col_names
+str(all_plates)
+all_plates
+```
+Get rid of water cells
+```{r}
+plate <- plate %>% select(-Water, -Water1) %>% filter(Layout %in% c("A","H"))
+```
+
+Sample minus Blank
+```{r}
+plate_diff <-  all_plates %>%
+  mutate(Sample1 = Sample1 - Blank1,
+         Sample2 =Sample2 - Blank2,
+         Sample3 =Sample3 - Blank3,
+         Sample4 =Sample4 - Blank4,
+         #Sample5 - Blank5
+         )
+plate_diff<- plate_diff%>%
+  select(starts_with("Sample"), StartTime, Layout)
+```
+Seperate wt and shc and change a layout to the real sample name
+```{r}
+wt <- plate_diff %>%
+  select(Sample1, Sample2, StartTime, Layout) %>% 
+  mutate(Type = ifelse(Layout %in% c("A","B","C","D"), "WT","WT + Ca") )
+
+wt_gat <- wt %>% gather(key, value, -one_of("StartTime", "Layout", "Type"))
+
+shc<- plate_diff %>%
+  select(Sample3, Sample4, StartTime, Layout) %>% 
+  mutate(Type = ifelse(Layout %in% c("A","B","C","D"), "SHC","SHC + Ca") )
+shc_gat <- shc %>% gather(key, value, -one_of("StartTime", "Layout", "Type"))
+
+```
+
+Growth Rate plot
+WT
+```{r}
+ggplot(wt_gat, aes(x = StartTime, y = value, col = Type )) +
+  geom_point()
+```
+SHC
+```{r}
+
+ggplot(shc_gat, aes(x = StartTime, y = value, col = Type )) +
+  geom_point() +
+  stat_smooth(method = 'nls', formula = value ~ a*exp(b *StartTime), aes(colour = 'Exponential'), se = FALSE, start = list(a=1,b=1))
+  geom_smooth(data =subset(shc_gat, StartTime > as.POSIXct('2017-06-29 06:06:36')), method = "lm", formula= (value ~ exp(StartTime)), se = F) 
+  #stat_smooth_func(geom="text",method="lm",hjust=3,parse=TRUE)
+```
+
+
+
+
+```{r}
+mod<- lm(data =subset(shc_gat, StartTime > as.POSIXct('2017-06-29 06:06:36')), 
+         formula = value ~ StartTime)
+
+mod
+```
+to do:
+- fit exponential model
+- get rid of date in df - leave only time
+- transfer it to shiny
+
+
+```{r}
+shc_gat <- shc %>% gather(key, value, -one_of("StartTime", "Layout", "Type"))
+
+time <- format(shc_gat$StartTime, format="%H:%M:%S") 
+shc_gat$StartTime <- strptime(time, format = "%H:%M:%S")
+shc_gat$StartTime=shc_gat$StartTime$sec/60 + shc_gat$StartTime$min/60 + shc_gat$StartTime$hour
+
+shc_gat$value <- abs(shc_gat$value)
+
+#shc_gat$StartTime<- as.integer(shc_gat$StartTime)
+str(shc_gat)
+shc_gat$Type <- as.factor(shc_gat$Type)
+log.model <-lm(log(value) ~ StartTime, shc_gat)
+exp.model <-lm(value ~ exp(StartTime), shc_gat)
+
+log.model.df <- data.frame(x = shc_gat$StartTime,
+                           y = exp(fitted(lm(log(value) ~ StartTime, shc_gat))),
+                           Type = shc_gat$Type)
+
+ggplot(shc_gat, aes(x = StartTime, y = value, col = Type )) +
+  geom_point() +
+  geom_smooth(method="nls",se=FALSE,
+                formula=y~a+b*exp(-c*x),
+                method.args=list(start=list(a=0.6,b=1.5,c=1)),
+                colour="red")
+  #geom_smooth(method="nls", formula= y ~ exp(x), se=FALSE, linetype = 1) +
+  #geom_line(data = log.model.df, aes(x = x,y = y, colour = Type), size = 1, linetype = 2) 
+  geom_smooth(method="glm",
+              method.args=list(family=gaussian(link="log")), 
+              se = F) +
+  stat_smooth_func(geom="text",method="glm",
+              method.args=list(family=gaussian(link="log")),hjust=0,parse=TRUE)
+```  
+
+```{r}
+mod = glm( data=shc_gat, formula =value ~ StartTime, family=gaussian(link="log"))
+summary(mod)
+
+```
+
