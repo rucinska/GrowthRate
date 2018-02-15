@@ -50,7 +50,7 @@ shinyUI(fluidPage(
         tabItem(  
           tabName = "data",    
           fluidRow( 
-            box(width = 3, title = "Upload Data",
+            box(width = 5, title = "Upload Data",
                 shinyjs::useShinyjs(),
                 div(
                   id = "side-panel",
@@ -58,71 +58,179 @@ shinyUI(fluidPage(
                                  title = "Please select a folder:",
                                  buttonType = "default", class = NULL),
                   hr(),
-                  checkboxInput("removewater", "Remove water", value = TRUE),
+                  checkboxInput("removewater", "Remove water", value = FALSE),
+                 
+                  box(width = 12,title = "Assign columns",
+                      
+                      
+                      column(
+                        width = 3,
+                        div(style = "white-space: nowrap;", 
+                               
+                            h5(textInput("name1", label = "Sample 1 Name", value = "Enter name..."),style="display: inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "sam1", label = "Sample 1",c(),  multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "bla1", label = "Blank 1",c(), multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;")
+                        ),
+                        div(style = "white-space: nowrap;",
+
+                            h5(textInput("name2", label = "Sample 2 Name", value = "Enter name..."),style="display: inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "sam2", label = "Sample 2",c(),  multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "bla2", label = "Blank 2",c(), multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;")
+                        ),
+                        div(style = "white-space: nowrap;",
+                    
+                            h5(textInput("name3", label = "Sample 3 Name", value = "Enter name..."),style="display: inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "sam3", label = "Sample 3",c(),  multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "bla3", label = "Blank 3",c(), multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;")
+                        ),
+                        div(style = "white-space: nowrap;",
+          
+
+                            h5(textInput("name4", label = "Sample 4 Name", value = "Enter name..."),style="display: inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "sam4", label = "Sample 4",c(),  multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "bla4", label = "Blank 4",c(), multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;")
+                        ),
+                        div(style = "white-space: nowrap;",
+
+                            h5(textInput("name5", label = "Sample 5 Name", value = "Enter name..."),style="display: inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "sam5", label = "Sample 5",c(),  multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "bla5", label = "Blank 5",c(), multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;")
+                        ),
+                        div(style = "white-space: nowrap;",
+                            
+                            h5(textInput("name6", label = "Sample 6 Name", value = "Enter name..."),style="display: inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "sam6", label = "Sample 6",c(),  multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "bla6", label = "Blank 6",c(), multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;")
+                        ),
+                        div(style = "white-space: nowrap;",
+                          
+                            h5(textInput("name7", label = "Sample 7 Name", value = "Enter name..."),style="display: inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "sam7", label = "Sample 7",c(),  multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "bla7", label = "Blank 7",c(), multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;")
+                        ),
+                        div(style = "white-space: nowrap;",
+
+                            h5(textInput("name8", label = "Sample 8 Name", value = "Enter name..."),style="display: inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "sam8", label = "Sample 8",c(),  multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "bla8", label = "Blank 8",c(), multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;")
+                        ),
+                        div(style = "white-space: nowrap;",
+
+                            h5(textInput("name9", label = "Sample 9 Name", value = "Enter name..."),style="display: inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "sam9", label = "Sample 9",c(),  multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;"),
+                            h5(selectInput(inputId = "bla9", label = "Blank 9",c(), multiple = FALSE, selectize = TRUE),style="display:inline-block; width: 100%;")
+                        )
+                        
+                      )#end column
+                  ), #end box
                   
-                    column(3, selectInput("select", "Sample 1",c(), multiple = FALSE)),
-                    column(3, selectInput("select", "Blank 1",c(), multiple = FALSE))
-                  
-                  
-                  
-                  # radioButtons("feat", "Select Feature", c("Species","Head Group", "Length","Double Bonds"), selected = "Species"),
-                  # hr(),
-                  # conditionalPanel(
-                  #   condition = "input.feat == 'Species'", selectInput("species", "Which Species: ", c(),  multiple = TRUE)),
-                  # conditionalPanel(
-                  #   condition = "input.feat == 'Head Group'", selectInput("feat_gh", "Which Head Groups: ", c(),  multiple = TRUE)),
-                  # conditionalPanel(
-                  #   condition = "input.feat == 'Length'", selectInput("feat_len", "Which Length: ", c(), multiple = TRUE)),
-                  # conditionalPanel(
-                  #   condition = "input.feat == 'Double Bonds'", selectInput("feat_db", "Which Double Bonds: ",c(), multiple = TRUE)),
-                  # 
-                  # 
-                  # checkboxGroupInput("exp_con", "Choose experimental conditions:",
-                  #                    c(#All = 'all',
-                  #                      GrowthStage ='Growth Stage',
-                  #                      Temperature = 'Temperature',
-                  #                      #pH = 'pH',
-                  #                      Salt = 'Salt',
-                  #                      Methanol = 'Methanol',
-                  #                      Triton = "Triton")),
-                  # helpText(em("Note: Unselect if you want to delete an experimental condition!")),
-                  # selectInput("select", "Select columns to display.",c(), multiple = TRUE),
-                  # helpText(em("Note: Use delete button to de-select columns. Make sure you leave class, length and DB column!")),
-                  # actionButton("update", "Update Data Set", class = "btn-primary",style='padding:4px; font-size:120%')
-                  # #actionButton("reset", "Reset Input", class = "btn-primary",style='padding:4px; font-size:120%')
+                      # column(2, 
+                      #        selectInput(inputId = "sam1", label = "Sample 1",c(),  multiple = FALSE, selectize = TRUE),
+                      #        selectInput(inputId = "sam2", label = "Sample 2",c(),  multiple = FALSE, selectize = TRUE),
+                      #        selectInput(inputId = "sam3", label = "Sample 3",c(),  multiple = FALSE, selectize = TRUE),
+                      #        selectInput(inputId = "sam4", label = "Sample 4",c(),  multiple = FALSE, selectize = TRUE),
+                      #        selectInput(inputId = "sam5", label = "Sample 5",c(),  multiple = FALSE, selectize = TRUE),
+                      #        selectInput(inputId = "sam6", label = "Sample 6",c(),  multiple = FALSE, selectize = TRUE),
+                      #        selectInput(inputId = "sam7", label = "Sample 7",c(),  multiple = FALSE, selectize = TRUE),
+                      #        selectInput(inputId = "sam8", label = "Sample 8",c(),  multiple = FALSE, selectize = TRUE),
+                      #        selectInput(inputId = "sam9", label = "Sample 9",c(),  multiple = FALSE, selectize = TRUE)
+                      #        
+                      #       
+                      # ),
+                    #   column(2,
+                    #         selectInput(inputId = "bla1", label = "Blank 1",c(), 
+                    #                      multiple = FALSE, selectize = TRUE),
+                    #         selectInput(inputId = "bla2", label = "Blank 2",c(), 
+                    #                      multiple = FALSE, selectize = TRUE),
+                    #         selectInput(inputId = "bla3", label = "Blank 3",c(), 
+                    #                      multiple = FALSE, selectize = TRUE),
+                    #         selectInput(inputId = "bla4", label = "Blank 4",c(), 
+                    #                      multiple = FALSE, selectize = TRUE),
+                    #         selectInput(inputId = "bla5", label = "Blank 5",c(), 
+                    #                      multiple = FALSE, selectize = TRUE),
+                    #         selectInput(inputId = "bla6", label = "Blank 6",c(), 
+                    #                     multiple = FALSE, selectize = TRUE),
+                    #         selectInput(inputId = "bla7", label = "Blank 7",c(), 
+                    #                     multiple = FALSE, selectize = TRUE),
+                    #         selectInput(inputId = "bla8", label = "Blank 8",c(), 
+                    #                     multiple = FALSE, selectize = TRUE),
+                    #         selectInput(inputId = "bla9", label = "Blank 9",c(), 
+                    #                     multiple = FALSE, selectize = TRUE)
+                    # 
+                    # ),
+                    # column(3,
+                    #       textInput("text1", "Sample1 Name", "" ),
+                    #       textInput("text2", label ="Sample2 Name"),
+                    #       textInput("text3", label ="Sample3 Name", 
+                    #           value = "Enter name..."),
+                    #       textInput("text4", label ="Sample4 Name", 
+                    #           value = "Enter name..."),
+                    #       textInput("text5", label ="Sample5 Name", 
+                    #           value = "Enter name..."),
+                    #       textInput("text6", label ="Sample6 Name", 
+                    #           value = "Enter name..."),
+                    #       textInput("text7", label ="Sample7 Name", 
+                    #           value = "Enter name..."),
+                    #       textInput("text8", label ="Sample8 Name", 
+                    #           value = "Enter name..."),
+                    #       textInput("text9", label ="Sample9 Name", 
+                    #           value = "Enter name...")
+                    #        
+                    # )
+                    #),
+                  textInput("text1", "Sample1 Name", "" ),
+                  checkboxInput("mean_rep", "Take average for replicates", value = FALSE),
+                  actionButton("update", "Update", class = "btn-primary",style='padding:4px; font-size:120%'),
+                  actionButton("reset", "Reset", class = "btn-primary",style='padding:4px; font-size:120%')
+                
+                
                 )
             ),
-            box(width = 8, title = "Data", solidHeader = TRUE,
+            box(width = 7, title = "Data", solidHeader = TRUE,
+                column( width = 7,
+                box(width = 7,title = "Data orginal",
+                  div(style = "white-space: nowrap;",  
+                        DT::dataTableOutput("contents"))
+                )
+                ),
+                br(),
+                br(),
+                column( width = 7,
+                box(width = 7,title = "Data modified",
+                    div(style = "white-space: nowrap;", 
+                    DT::dataTableOutput("contents1"),
+                    downloadButton("downloadData", "Download")))
+                )
+            )
+            
+                    ) # end FluidRow
                 
-                div(shinyjs::useShinyjs(),id = "table",style = 'overflow-x: scroll',  
-                    DT::dataTableOutput("contents")), 
-                downloadButton("downloadData", "Download")))
         ),
         
         tabItem( tabName = "plot",
                  
                  fluidRow(
                    
-                   box(width = 3, radioButtons("plot_type", "Select Plot Type", c("Lipid Abundance", "Box Plot","PCA","Standard Deviation", "Line Plot"), selected = "Lipid Abundance"),
-                       hr(),
-                       #conditionalPanel(
-                       # condition = "input.plot_type == 'Standard Deviation'", numericInput("obs", "Set y axes:", 7)),
-                       conditionalPanel(
-                         condition = "input.plot_type == 'Lipid Abundance'", checkboxInput("hg_lipabu", "Seperate by Head Group Class", FALSE)),
-                       conditionalPanel(
-                         condition = "input.plot_type == 'Line Plot'", checkboxInput("hg", "Seperate by Head Group Class", FALSE)),
-                       conditionalPanel(
-                         condition = "input.plot_type == 'Box Plot'", checkboxInput("hg_bx", "Seperate by Head Group Class", FALSE)),
-                       conditionalPanel(
-                         condition = "input.plot_type == 'PCA'", checkboxInput("pca_names", "Hide names", FALSE)),
-                       textInput('xlab', 'X axis label', value = "Lipid Species"),
-                       textInput('ylab', 'Y axis label', value = "Abundance [mol %]"),
-                       textInput('plotTitle', 'Plot title', value = ""),
-                       textInput('Legend', 'Legend', value = "Lipid Abundance"),
-                       selectInput('legendposition', label ='Legend Position',
-                                   choices=c("left", "right", "bottom", "top"),
-                                   multiple=FALSE, selectize=TRUE,selected="bottom"),
-                       actionButton("update_plot", "Plot", class = "btn-primary",style='padding:4px; font-size:120%')),
+                   # box(width = 3, radioButtons("plot_type", "Select Plot Type", c("Lipid Abundance", "Box Plot","PCA","Standard Deviation", "Line Plot"), selected = "Lipid Abundance"),
+                   #     hr(),
+                   #     #conditionalPanel(
+                   #     # condition = "input.plot_type == 'Standard Deviation'", numericInput("obs", "Set y axes:", 7)),
+                   #     conditionalPanel(
+                   #       condition = "input.plot_type == 'Lipid Abundance'", checkboxInput("hg_lipabu", "Seperate by Head Group Class", FALSE)),
+                   #     conditionalPanel(
+                   #       condition = "input.plot_type == 'Line Plot'", checkboxInput("hg", "Seperate by Head Group Class", FALSE)),
+                   #     conditionalPanel(
+                   #       condition = "input.plot_type == 'Box Plot'", checkboxInput("hg_bx", "Seperate by Head Group Class", FALSE)),
+                   #     conditionalPanel(
+                   #       condition = "input.plot_type == 'PCA'", checkboxInput("pca_names", "Hide names", FALSE)),
+                   #     textInput('xlab', 'X axis label', value = "Lipid Species"),
+                   #     textInput('ylab', 'Y axis label', value = "Abundance [mol %]"),
+                   #     textInput('plotTitle', 'Plot title', value = ""),
+                   #     textInput('Legend', 'Legend', value = "Lipid Abundance"),
+                   #     selectInput('legendposition', label ='Legend Position',
+                   #                 choices=c("left", "right", "bottom", "top"),
+                   #                 multiple=FALSE, selectize=TRUE,selected="bottom"),
+                   #     actionButton("update_plot", "Plot", class = "btn-primary",style='padding:4px; font-size:120%')),
                    box(
                      #h1("Experimental conditions:", textOutput("selected_var")),
                      textOutput("selected_var"),
@@ -132,8 +240,7 @@ shinyUI(fluidPage(
                        12,
                        plotOutput('plot', brush=brushOpts("plot_brush",resetOnNew=T)),
                        #verbatimTextOutput("brush_info"),
-                       conditionalPanel(
-                         condition = "input.plot_type == 'Lipid Abundance'", wellPanel(width=9,h4("Points selected by brushing:"),DT::dataTableOutput("plot_brushed_points"))),
+                       wellPanel(width=9,h4("Select points to calculate Growth Rate:"),DT::dataTableOutput("plot_brushed_points")),
                        div(
                          id = "save_plot_area",
                          inline_ui(

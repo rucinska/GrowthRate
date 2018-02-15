@@ -64,8 +64,22 @@ Specify col names
 col_names <- c("Layout", "Sample1","Blank1","Blankx","Blankx1", "Sample2","Blank2","Sample3", "Blank3","Blankx2","Blankx3","Blank4","Sample4", "StartTime")
 
 names(all_plates) <- col_names
+
+ cols <- colnames(all_plates) 
+ length(cols)
+ cols <- cols[!cols %in% c("Layout","StartTime")]
 str(all_plates)
 all_plates
+
+all_plates <- all_plates %>% 
+            select(-Sample1, -Sample4) %>%
+            filter(!Layout %in% c("A","H") )
+
+
+all_plates %>% 
+            group_by(Layout) %>%
+            summarise_at(.vars = names(.),.funs = c(mean="mean")) %>%
+            select(-Layout_mean)
 ```
 Get rid of water cells
 ```{r}
