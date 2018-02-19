@@ -165,17 +165,15 @@ log.model.df <- data.frame(x = shc_gat$StartTime,
 
 ggplot(shc_gat, aes(x = StartTime, y = value, col = Type )) +
   geom_point() +
-  geom_smooth(method="nls",se=FALSE,
-                formula=y~a+b*exp(-c*x),
-                method.args=list(start=list(a=0.6,b=1.5,c=1)),
-                colour="red")
+  # geom_smooth(method="nls",se=FALSE,
+  #               formula=y~a+b*exp(-c*x),
+  #               method.args=list(start=list(a=0.6,b=1.5,c=1)),
+  #               colour="red") +
   #geom_smooth(method="nls", formula= y ~ exp(x), se=FALSE, linetype = 1) +
   #geom_line(data = log.model.df, aes(x = x,y = y, colour = Type), size = 1, linetype = 2) 
   geom_smooth(method="glm",
               method.args=list(family=gaussian(link="log")), 
-              se = F) +
-  stat_smooth_func(geom="text",method="glm",
-              method.args=list(family=gaussian(link="log")),hjust=0,parse=TRUE)
+              se = F) 
 ```  
 
 ```{r}

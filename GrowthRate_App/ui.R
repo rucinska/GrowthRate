@@ -58,8 +58,8 @@ shinyUI(fluidPage(
                                  title = "Please select a folder:",
                                  buttonType = "default", class = NULL),
                   hr(),
-                  checkboxInput("removewater", "Remove water", value = FALSE),
-                 
+                  checkboxInput("removewater", "Remove water", value = TRUE),
+                  checkboxInput("mean_rep", "Take average for replicates", value = FALSE),
                   box(width = 12,title = "Assign columns",
                       
                       
@@ -179,7 +179,7 @@ shinyUI(fluidPage(
                     # )
                     #),
                   textInput("text1", "Sample1 Name", "" ),
-                  checkboxInput("mean_rep", "Take average for replicates", value = FALSE),
+                 
                   actionButton("update", "Update", class = "btn-primary",style='padding:4px; font-size:120%'),
                   actionButton("reset", "Reset", class = "btn-primary",style='padding:4px; font-size:120%')
                 
@@ -187,21 +187,12 @@ shinyUI(fluidPage(
                 )
             ),
             box(width = 7, title = "Data", solidHeader = TRUE,
-                column( width = 7,
-                box(width = 7,title = "Data orginal",
-                  div(style = "white-space: nowrap;",  
-                        DT::dataTableOutput("contents"))
-                )
-                ),
-                br(),
-                br(),
-                column( width = 7,
-                box(width = 7,title = "Data modified",
+              
                     div(style = "white-space: nowrap;", 
                     DT::dataTableOutput("contents1"),
                     downloadButton("downloadData", "Download")))
-                )
-            )
+                
+            
             
                     ) # end FluidRow
                 
@@ -210,35 +201,13 @@ shinyUI(fluidPage(
         tabItem( tabName = "plot",
                  
                  fluidRow(
-                   
-                   # box(width = 3, radioButtons("plot_type", "Select Plot Type", c("Lipid Abundance", "Box Plot","PCA","Standard Deviation", "Line Plot"), selected = "Lipid Abundance"),
-                   #     hr(),
-                   #     #conditionalPanel(
-                   #     # condition = "input.plot_type == 'Standard Deviation'", numericInput("obs", "Set y axes:", 7)),
-                   #     conditionalPanel(
-                   #       condition = "input.plot_type == 'Lipid Abundance'", checkboxInput("hg_lipabu", "Seperate by Head Group Class", FALSE)),
-                   #     conditionalPanel(
-                   #       condition = "input.plot_type == 'Line Plot'", checkboxInput("hg", "Seperate by Head Group Class", FALSE)),
-                   #     conditionalPanel(
-                   #       condition = "input.plot_type == 'Box Plot'", checkboxInput("hg_bx", "Seperate by Head Group Class", FALSE)),
-                   #     conditionalPanel(
-                   #       condition = "input.plot_type == 'PCA'", checkboxInput("pca_names", "Hide names", FALSE)),
-                   #     textInput('xlab', 'X axis label', value = "Lipid Species"),
-                   #     textInput('ylab', 'Y axis label', value = "Abundance [mol %]"),
-                   #     textInput('plotTitle', 'Plot title', value = ""),
-                   #     textInput('Legend', 'Legend', value = "Lipid Abundance"),
-                   #     selectInput('legendposition', label ='Legend Position',
-                   #                 choices=c("left", "right", "bottom", "top"),
-                   #                 multiple=FALSE, selectize=TRUE,selected="bottom"),
-                   #     actionButton("update_plot", "Plot", class = "btn-primary",style='padding:4px; font-size:120%')),
+                  
                    box(
-                     #h1("Experimental conditions:", textOutput("selected_var")),
-                     textOutput("selected_var"),
-                     textOutput("selected_feat"),
                      
                      width = 8, title = "Plot", solidHeader = TRUE, column(
                        12,
                        plotOutput('plot', brush=brushOpts("plot_brush",resetOnNew=T)),
+                       verbatimTextOutput("summary1"),
                        #verbatimTextOutput("brush_info"),
                        wellPanel(width=9,h4("Select points to calculate Growth Rate:"),DT::dataTableOutput("plot_brushed_points")),
                        div(
